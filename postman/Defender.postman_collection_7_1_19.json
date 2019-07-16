@@ -1,0 +1,2276 @@
+{
+	"info": {
+		"_postman_id": "f4b4ff7d-af15-4476-a27b-b8c9a659cd62",
+		"name": "Defender",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "IPAM",
+			"item": [
+				{
+					"name": "List APIs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Tenant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"defaultTenant\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/tenants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Local User - root3",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"root3@defender.local\",\n\t\"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Root3 as Executor Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"roles\": [\n\t\t\"ROLE_EXECUTOR\"\n\t],\n\t\"userName\": \"root3@defender.local\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localuser/localUserRoles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localuser",
+								"localUserRoles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add root3 to tenant",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"localUserId\": 6,\n\t\"tenantId\": 5\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localuser/entitleLocalUserToTenant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localuser",
+								"entitleLocalUserToTenant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Infoblox Credential",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"infoblox credentials {{prop}}\",\n\t\"username\": \"admin\",\n\t\"password\": \"VmwareS0v\",\n\t\"tenant\": \"api/tenants/5\",\n\t\"templateProperties\": {\n\t\t\"a\": 1,\n\t\t\"b\": \"c\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/credentials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Infoblox Endpoint",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"hostname\": \"infoblox803.sovlabs.net\",\n    \"port\": 443,\n    \"https\": true,\n    \"defaultDnsView\": \"default\",\n    \"defaultNetworkView\": \"default\",\n    \"wapiVersion\": \"2.0\",\n    \"hostTemplate\": null,\n    \"ptrRecordTemplate\": null,\n    \"fixedAddressTemplate\": null,\n    \"reservationType\": null,\n    \"arecordTemplate\": null,\n    \"credential\": \"api/credentials/7\",\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/infobloxEndpoints",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"infobloxEndpoints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Bluecat Credential",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"bluecat credentials {{prop}}\",\n\t\"username\": \"vrasvc\",\n\t\"password\": \"VmwareS0v\",\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/credentials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Bluecat Endpoint",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"hostname\": \"bluecat83.sovlabs.net\",\n\t\"configurationName\": \"Configuration 01\",\n\t\"port\": 443,\n\t\"https\": true,\n\t\"version\": \"1\",\n\t\"credential\": \"api/credentials/9\",\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/bluecatEndpoints",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"bluecatEndpoints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Infoblox IPAM Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"endpoint\": \"http://localhost:7777/api/infobloxEndpoints/8\",\n\t\"description\": \"infoblox ipam profile {{prop}}\",\n\t\"type\": \"Infoblox\",\n\t\"dnsSuffix\": \"infoblox803.sovlabs.net\",\n\t\"excludedIps\": [\"192.168.1.2\"],\n\t\"networks\": [\n\t\t{\n\t\t\t\"networkName\": \"network1\",\n\t\t\t\"subnet\": \"10.30.37.0/24\",\n\t\t\t\"gateway\": \"10.30.37.1\",\n\t\t\t\"networkMask\": \"COMPUTED-NETMASK\"\n\t\t}\n\t],\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/ipamProfiles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"ipamProfiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Bluecat IPAM Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"endpoint\": \"http://localhost:7777/api/bluecatEndpoints/10\",\n\t\"description\": \"bluecat ipam profile {{prop}}\",\n\t\"type\": \"Bluecat\",\n\t\"dnsSuffix\": \"bluecat83.sovlabs.net\",\n\t\"networks\": [\n                    {\n                        \"networkName\": \"bluecat network1\",\n                        \"subnet\": \"10.30.48.0/24\",\n                        \"gateway\": \"10.30.48.1\",\n                        \"networkMask\": \"COMPUTED-NETMASK\"\n                    },\n                    {\n                        \"networkName\": \"bluecat network2\",\n                        \"subnet\": \"10.30.49.0/24\",\n                        \"gateway\": \"10.30.49.1\",\n                        \"networkMask\": \"COMPUTED-NETMASK\"\n                    }\n                ],\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/ipamProfiles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"ipamProfiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List IPAM Profiles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/ipamProfiles?projection=summary",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"ipamProfiles"
+							],
+							"query": [
+								{
+									"key": "projection",
+									"value": "summary"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reserve Infoblox IP Address",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "root3@defender.local",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"ipamProfile\": \"api/ipamProfiles/11\",\n\t\"macAddress\": \"00:00:00:00:00:00\",\n\t\"hostname\": \"{{VirtualMachineName}}\",\n\t\"templateProperties\": {\n\t\t\"prop\": \"test value2\",\n\t\t\"VirtualMachineName\": \"rb-001\"\n\t},\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/ipAddressReservations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"ipAddressReservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Release Infoblox IP Address",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "root3@defender.local",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/ipAddressReservations/19?force=false",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"ipAddressReservations",
+								"19"
+							],
+							"query": [
+								{
+									"key": "force",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reserve Bluecat IP Address",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "root3@defender.local",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"ipamProfile\": \"api/ipamProfiles/13\",\n\t\"macAddress\": \"00:00:00:00:00:00\",\n\t\"hostname\": \"{{VirtualMachineName}}\",\n\t\"templateProperties\": {\n\t\t\"prop\": \"test value2\",\n\t\t\"VirtualMachineName\": \"rb-001\"\n\t},\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/ipAddressReservations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"ipAddressReservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Release Bluecat IP Address",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"ipamProfileId\": 28,\n\t\"macAddress\": \"00:00:00:00:00:00\",\n\t\"hostname\": \"rb-001\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/ipAddressReservations/17?force=false",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"ipAddressReservations",
+								"17"
+							],
+							"query": [
+								{
+									"key": "force",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List IpAddressReservations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/ipAddressReservations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"ipAddressReservations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Custom Naming",
+			"item": [
+				{
+					"name": "List APIs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Tenant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"defaultTenant\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/tenants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Local User - root3",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"root3@defender.local\",\n\t\"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Root3 as Executor Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"roles\": [\n\t\t\"ROLE_EXECUTOR\"\n\t],\n\t\"userName\": \"root3@defender.local\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localuser/localUserRoles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localuser",
+								"localUserRoles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add root3 to tenant",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"localUserId\": 6,\n\t\"tenantId\": 5\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localuser/entitleLocalUserToTenant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localuser",
+								"entitleLocalUserToTenant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Naming Sequence #1",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"format\": \"sovlabs-/a//#/\",\n  \"initialvalue\": \"sovlabs-a0\",\n  \"reuse\": true,\n  \"name\": \"sequence1\",\n  \"tenant\": \"api/tenants/5\",\n  \"type\": \"pattern\",\n  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/namingSequences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"namingSequences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Naming Sequence #2",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"initialvalue\": \"9\",\n  \"lastvalue\": null,\n  \"length\": 3,\n  \"pad\": \"0\",\n  \"reuse\": true,\n  \"name\": \"sequence2\",\n  \"tenant\": \"api/tenants/5\",\n  \"type\": \"base10\",\n  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/namingSequences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"namingSequences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Naming Sequence #3",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"initialvalue\": \"9\",\n  \"length\": 3,\n  \"pad\": \"0\",\n  \"reuse\": true,\n  \"name\": \"sequence3\",\n  \"tenant\": \"api/tenants/5\",\n  \"type\": \"base16\",\n  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/namingSequences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"namingSequences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Naming Standard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"namingSequences\": [\n  \t\"api/namingSequences/7\",\n  \t\"api/namingSequences/8\",\n  \t\"api/namingSequences/9\"\n  \t],\n  \"name\": \"standard1\",\n  \"template\": \"{% if Environment == 'dev' %}{{sequence.sequence1}}-{{Environment}}-docker-node-{{sequence.sequence2}}{% else %}{{sequence.sequence1}}-{{Environment}}-kube-pod-{{sequence.sequence3}}{% endif %}\",\n  \"tenant\": \"api/tenants/5\",\n  \"templateProperties\": {\n  \t\"ownerName\": \"jsmith@company.com\",\n    \"Environment\": \"dev\",\n    \"OS\": \"Linux\",\n    \"Application\": \"Web Servers\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/namingStandards",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"namingStandards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add License",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"key\": \"# SovLabs vRA Extensibility Module NFR 2018.x License (id: 1531245888375)\\r\\na653836dac316b9dfe06dd9a1a16e7c649e1b335abaf2339b636c76fd597\\r\\ne8d0bc6a7a8666cf6e4437870611b365b5e05778b7889ae85aa482727b0d\\r\\n8bf9b9c3c2a7997bf4b4d8f44d285667345c164a28d002a84aefa1d145d2\\r\\n001a81e53cec8245ff78a3f506fd87857b97a7b40cf23b7b45c66bf9a9fc\\r\\n321232eadfd9282c78eb81924ea9e543149f39af07bb70eac66b016ad59a\\r\\n867c7e1e35984b26e12d431e947650aebb3bf3db12e5639bf85fb1191f17\\r\\ncfe4dc364b9e59d026fb892d11bd58f34e44255c09efb7fc939b9a057865\\r\\n6a7bf8bc271457a59d28d7d970a6e376714ba2718571aaa97750a44d5d86\\r\\n4ecb6a079dc5a369cab22d6525009c8a9d758e4270eeb6d4d3dd0f02d68f\\r\\n9b85870fc1798a1376902da1cd991d32d7849896d948182ffb34d08f918e\\r\\n8859ec0af4d4d681cac84a3d440c91b01d56df864e6f2175b32aefee252b\\r\\nb8ace2a0d7c6b4e5adcf3d027a3d7361592baf6c23be9f342533d07b43ae\\r\\neaee2c281a2249b14cbbda87b89f237df0509bae56b40fc1d44b80534fdb\\r\\n1b140d580881cc61f9e84b2332e0cab8698681d5e4fd4f906f413f594c26\\r\\nafe520284dced26f1f0823b11176263a7c5239fe215eba37a99aa14a9f42\\r\\n05af4382838324f844e7b4761db31239017d905a13dd23a04177b4e10322\\r\\nc2cd198c2b3e699983b10e9e48bc4a8cb4efc89ec6444337881690a08154\\r\\n438ddfb7228e35c1c50621b4e898ad08d491afb5bd16225f1889e4642c4a\\r\\nf6af580a5e7f389d99920ec738a31dbb6d50bca2c3a7a9e04bee62cb86fd\\r\\ne3c1f321afc9641e6fced3c5a48bf696ddce7aeca4d45aca5d07859315b9\\r\\nd753d3bb3719e5a47ef1df22a9a7b87642780b52447741d2b9fba610cd52\\r\\n84d7e47fe870c5750cd7f02791e1171f6085e6acbc27d7e1871a4f8dbea6\\r\\n6d7b8243a42880ba2b90dfe865e5f15240a6dd9e8fe221cd0a26f12e2ad4\\r\\n883b965b02ffbb7fd3c15c4fb10b446fe07ddbe021a0e5153134cd2380ed\\r\\n53453cc94a22190e57e8a949c2407e746ade59de429b7a55718db9920c12\\r\\n9d6f69c3f0f85ad428704bdbb579c19a472da39b18c2cb21b588fc480885\\r\\nc6ccaddb7140abc04e95d601669759418387a94b480eb7beca114d9b46c3\\r\\n186f2b835a0fd6b442e960c643a9cb38a9942caae999289e607cb5301c78\\r\\nba6f90d417668ab6595ad53013cd9078c6ee6807adabd3a8b56ed6b001af\\r\\nfaa1e0b53211acc18d64b7f4e5ad70152d09a65844ed45e645439db7cfb0\\r\\nc9546daa320f4b72351083a822dc629a854da98d463184a1d5e2382a20d5\\r\\n5f8712f54f45d83760b63a021448d85a84f5667771ed4a18962d1b427140\\r\\nd13861e2ec6a352074ffbd1ab7e312d803fe9d940a46152cb9b84c63eae4\\r\\neb68006690bad3a509f72489f3d32c5644ae0cf34bb684e133d4dd799d3f\\r\\ncf94164d3ccae084d510fad02257a8d218d070a228a3502d33fd95d1e7d5\\r\\n39e9c76c7f49dbc00d6691f39f4e34498e8e0ae00c3f61acd1d1b9d664ca\\r\\n60d3bd6171c230ea45c1adaa383119b7b4a49dfac09b4184d2110ff28ae7\\r\\na4f0603456325e5f08b21b880ec0c5b4941c803fb7681c36a1163268b7af\\r\\n3641d87711014b7ea7a64a5916f24fad0cbca5ecde314cbd890333b943b6\\r\\n47bd5ce1c7504182f75a7b30cf2f0dc79dd99cbf11bc2f56d2cc1391fcb7\\r\\n8ca601747b54eff3ecf61a2736de05e8b60915182b62cc822f65be009478\\r\\n0ae592003c13fd5328efb1a03bf8c1ead8bbaa404a5400a87ba733c3c096\\r\\ne522bb04bf8e4ee48b86ef09551bccfa4d73f78e14a8d942a33f5ec2da7d\\r\\n9da572235e21c64dba3c33c37c99a5d74db90557411d7d250f5caf575686\\r\\nabd893428bf114bc117fa29dea8602d03c444939ec414d0d10daf9d17604\\r\\n5e144e63d130be238de578565d59a55b5065d71265217603f0af17c9fbaf\\r\\n6f10da58e2176b30086c785eed1bd2681bc58e810dba72c7f2f15ca3386b\\r\\n557e7ea65dd152a7d81edad6babc4f4de5e62194ff0fb5cfff1f1220f655\\r\\n3115a9a4317778189bb038fecafc0e33bd9483db6c04f92aa305b86ed08a\\r\\n0fefb24fb7c79ab8cf4d6c0b85b8055c1322\",\n \"productId\": \"SOVLABS_VRA_MODULES\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/licenses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"licenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Next Value",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"namingSequenceId\": 9,\n\t\"vmPropertiesJson\": \"{}\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/naming/getSequenceValueAndIncrement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"naming",
+								"getSequenceValueAndIncrement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate CustomName",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"namingStandard\": \"api/namingStandards/10\",\n\t\"dnsSuffix\": \"sovlabs.net\",\n\t\"maxAttempts\": 3,\n\t\"templateProperties\": {\n\t\t\"ownerName\": \"bsmith@company.com\",\n        \"Environment\": \"dev\",\n        \"OS\": \"Linux\",\n        \"Application\": \"Web Servers\"\n\t},\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/customNames",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"customNames"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete CustomName",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"namingStandard\": \"api/namingStandards/9\",\n\t\"dnsSuffix\": \"sovlabs.net\",\n\t\"templateProperties\": {\n\t\t\"ownerName\": \"jsmith@company.com\",\n        \"Environment\": \"dev\",\n        \"OS\": \"Linux\",\n        \"Application\": \"Web Servers\"\n\t},\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/customNames/13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"customNames",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Naming Sequences",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/namingSequences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"namingSequences"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "735734d3-b1d3-4e3b-a96d-f6ac6a7c4493",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "88b32b4c-32ae-4ab8-abdf-a7e94f3aa018",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "Test",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"body\": \"string\",\n  \"emailGroupName\": \"string\",\n  \"id\": 0,\n  \"messageFormat\": \"string\",\n  \"messageSenderName\": \"string\",\n  \"messageServerName\": \"string\",\n  \"title\": \"string\",\n  \"type\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/notification/createTestNotification",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"notification",
+								"createTestNotification"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Local User",
+			"item": [
+				{
+					"name": "Create Local User - Non-Standard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userName\": \"root2@defender.local\",\n\t\"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localuser/localUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localuser",
+								"localUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Local User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"root3@defender.local\",\n\t\"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Local User Roles",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"roles\": [\n\t\t\"ROLE_EXECUTOR\",\n\t\t\"ROLE_GLOBAL_ADMIN\"\n\t],\n\t\"userName\": \"root3@defender.local\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localuser/localUserRoles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localuser",
+								"localUserRoles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create tenant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"defaultTenant\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/tenants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add User To Tenant",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"localUserId\": 4,\n\t\"tenantId\": 5\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/localuser/entitleLocalUserToTenant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"localuser",
+								"entitleLocalUserToTenant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Credential as Root2",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "root3@defender.local",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"user1 by root3\",\n\t\"password\": \"password\",\n\t\"tenant\": \"api/tenants/5\",\n\t\"shortName\": \"_shortName\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/credentials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Credential as Root",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "root@defender.local",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"user1 by root\",\n\t\"password\": \"password\",\n\t\"tenant\": \"api/tenants/5\",\n\t\"shortName\": \"shortName\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/credentials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Credentials as root3",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "root3@defender.local",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/credentials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Credentials as root",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/credentials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Credential as root3",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "root3@defender.local",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/credentials/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"credentials",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Custom Naming with DNS Check",
+			"item": [
+				{
+					"name": "Create Naming Sequence #1",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"format\": \"vra73cls/##/\",\n  \"initialvalue\": \"vra73cls01\",\n  \"reuse\": false,\n  \"name\": \"vraSequence\",\n  \"tenant\": \"api/tenants/5\",\n  \"type\": \"pattern\",\n  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/namingSequences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"namingSequences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Naming Standard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"namingSequences\": [\n  \t\"api/namingSequences/6\"\n  \t],\n  \"name\": \"vraNamingStandard\",\n  \"template\": \"{{sequence.vraSequence}}\",\n  \"tenant\": \"api/tenants/5\",\n  \"templateProperties\": {\n  \t\"ownerName\": \"jsmith@company.com\",\n    \"Environment\": \"dev\",\n    \"OS\": \"Linux\",\n    \"Application\": \"Web Servers\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/namingStandards",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"namingStandards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add License",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"key\": \"# SovLabs vRA Extensibility Module NFR 2018.x License (id: 1531245888375)\\r\\na653836dac316b9dfe06dd9a1a16e7c649e1b335abaf2339b636c76fd597\\r\\ne8d0bc6a7a8666cf6e4437870611b365b5e05778b7889ae85aa482727b0d\\r\\n8bf9b9c3c2a7997bf4b4d8f44d285667345c164a28d002a84aefa1d145d2\\r\\n001a81e53cec8245ff78a3f506fd87857b97a7b40cf23b7b45c66bf9a9fc\\r\\n321232eadfd9282c78eb81924ea9e543149f39af07bb70eac66b016ad59a\\r\\n867c7e1e35984b26e12d431e947650aebb3bf3db12e5639bf85fb1191f17\\r\\ncfe4dc364b9e59d026fb892d11bd58f34e44255c09efb7fc939b9a057865\\r\\n6a7bf8bc271457a59d28d7d970a6e376714ba2718571aaa97750a44d5d86\\r\\n4ecb6a079dc5a369cab22d6525009c8a9d758e4270eeb6d4d3dd0f02d68f\\r\\n9b85870fc1798a1376902da1cd991d32d7849896d948182ffb34d08f918e\\r\\n8859ec0af4d4d681cac84a3d440c91b01d56df864e6f2175b32aefee252b\\r\\nb8ace2a0d7c6b4e5adcf3d027a3d7361592baf6c23be9f342533d07b43ae\\r\\neaee2c281a2249b14cbbda87b89f237df0509bae56b40fc1d44b80534fdb\\r\\n1b140d580881cc61f9e84b2332e0cab8698681d5e4fd4f906f413f594c26\\r\\nafe520284dced26f1f0823b11176263a7c5239fe215eba37a99aa14a9f42\\r\\n05af4382838324f844e7b4761db31239017d905a13dd23a04177b4e10322\\r\\nc2cd198c2b3e699983b10e9e48bc4a8cb4efc89ec6444337881690a08154\\r\\n438ddfb7228e35c1c50621b4e898ad08d491afb5bd16225f1889e4642c4a\\r\\nf6af580a5e7f389d99920ec738a31dbb6d50bca2c3a7a9e04bee62cb86fd\\r\\ne3c1f321afc9641e6fced3c5a48bf696ddce7aeca4d45aca5d07859315b9\\r\\nd753d3bb3719e5a47ef1df22a9a7b87642780b52447741d2b9fba610cd52\\r\\n84d7e47fe870c5750cd7f02791e1171f6085e6acbc27d7e1871a4f8dbea6\\r\\n6d7b8243a42880ba2b90dfe865e5f15240a6dd9e8fe221cd0a26f12e2ad4\\r\\n883b965b02ffbb7fd3c15c4fb10b446fe07ddbe021a0e5153134cd2380ed\\r\\n53453cc94a22190e57e8a949c2407e746ade59de429b7a55718db9920c12\\r\\n9d6f69c3f0f85ad428704bdbb579c19a472da39b18c2cb21b588fc480885\\r\\nc6ccaddb7140abc04e95d601669759418387a94b480eb7beca114d9b46c3\\r\\n186f2b835a0fd6b442e960c643a9cb38a9942caae999289e607cb5301c78\\r\\nba6f90d417668ab6595ad53013cd9078c6ee6807adabd3a8b56ed6b001af\\r\\nfaa1e0b53211acc18d64b7f4e5ad70152d09a65844ed45e645439db7cfb0\\r\\nc9546daa320f4b72351083a822dc629a854da98d463184a1d5e2382a20d5\\r\\n5f8712f54f45d83760b63a021448d85a84f5667771ed4a18962d1b427140\\r\\nd13861e2ec6a352074ffbd1ab7e312d803fe9d940a46152cb9b84c63eae4\\r\\neb68006690bad3a509f72489f3d32c5644ae0cf34bb684e133d4dd799d3f\\r\\ncf94164d3ccae084d510fad02257a8d218d070a228a3502d33fd95d1e7d5\\r\\n39e9c76c7f49dbc00d6691f39f4e34498e8e0ae00c3f61acd1d1b9d664ca\\r\\n60d3bd6171c230ea45c1adaa383119b7b4a49dfac09b4184d2110ff28ae7\\r\\na4f0603456325e5f08b21b880ec0c5b4941c803fb7681c36a1163268b7af\\r\\n3641d87711014b7ea7a64a5916f24fad0cbca5ecde314cbd890333b943b6\\r\\n47bd5ce1c7504182f75a7b30cf2f0dc79dd99cbf11bc2f56d2cc1391fcb7\\r\\n8ca601747b54eff3ecf61a2736de05e8b60915182b62cc822f65be009478\\r\\n0ae592003c13fd5328efb1a03bf8c1ead8bbaa404a5400a87ba733c3c096\\r\\ne522bb04bf8e4ee48b86ef09551bccfa4d73f78e14a8d942a33f5ec2da7d\\r\\n9da572235e21c64dba3c33c37c99a5d74db90557411d7d250f5caf575686\\r\\nabd893428bf114bc117fa29dea8602d03c444939ec414d0d10daf9d17604\\r\\n5e144e63d130be238de578565d59a55b5065d71265217603f0af17c9fbaf\\r\\n6f10da58e2176b30086c785eed1bd2681bc58e810dba72c7f2f15ca3386b\\r\\n557e7ea65dd152a7d81edad6babc4f4de5e62194ff0fb5cfff1f1220f655\\r\\n3115a9a4317778189bb038fecafc0e33bd9483db6c04f92aa305b86ed08a\\r\\n0fefb24fb7c79ab8cf4d6c0b85b8055c1322\",\n \"productId\": \"SOVLABS_VRA_MODULES\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/licenses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"licenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate CustomName",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"namingStandard\": \"api/namingStandards/7\",\n\t\"dnsSuffix\": \"sovlabs.net\",\n\t\"templateProperties\": {\n\t\t\"ownerName\": \"jsmith@company.com\",\n        \"Environment\": \"dev\",\n        \"OS\": \"Linux\",\n        \"Application\": \"Web Servers\"\n\t},\n\t\"tenant\": \"api/tenants/5\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/customNames",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"customNames"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Naming Sequences",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/namingSequences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"namingSequences"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Refactor",
+			"item": [
+				{
+					"name": "Custom Naming with DNS Check",
+					"item": [
+						{
+							"name": "Create Naming Sequence #1",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"format\": \"vra73cls/##/\",\n  \"initialvalue\": \"vra73cls01\",\n  \"reuse\": false,\n  \"name\": \"vraSequence\",\n  \"tenant\": {\n\t\t\t  \t \"name\": \"tenant1\",\n\t\t\t  \t \"version\": 0\n\t\t\t  },\n  \"type\": \"pattern\",\n  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\",\n  \"version\": 0\n}"
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Naming Standard",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"namingSequences\": [\n\t\t  \t{\n\t\t  \"format\": \"vra73cls/##/\",\n\t\t  \"initialvalue\": \"vra73cls01\",\n\t\t  \"reuse\": false,\n\t\t  \"name\": \"vraSequence\",\n\t\t  \"tenant\": {\n\t\t        \"id\": 1,\n\t\t        \"version\": 0,\n\t\t        \"name\": \"tenant1\"\n\t\t    },\n\t\t  \"type\": \"pattern\",\n\t\t  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\",\n\t\t  \"version\": 0\n\t\t}\n  \t],\n  \"name\": \"vraNamingStandard\",\n  \"template\": \"{{sequence.vraSequence}}\",\n  \"tenant\": {\n\t\t        \"id\": 1,\n\t\t        \"version\": 0,\n\t\t        \"name\": \"tenant1\"\n\t\t    },\n  \"templateProperties\": {\n  \t\"ownerName\": \"jsmith@company.com\",\n    \"Environment\": \"dev\",\n    \"OS\": \"Linux\",\n    \"Application\": \"Web Servers\"\n  },\n  \"version\": 0\n}"
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingStandards",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingStandards"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add License",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n \"key\": \"# SovLabs vRA Extensibility Module NFR 2018.x License (id: 1531245888375)\\r\\na653836dac316b9dfe06dd9a1a16e7c649e1b335abaf2339b636c76fd597\\r\\ne8d0bc6a7a8666cf6e4437870611b365b5e05778b7889ae85aa482727b0d\\r\\n8bf9b9c3c2a7997bf4b4d8f44d285667345c164a28d002a84aefa1d145d2\\r\\n001a81e53cec8245ff78a3f506fd87857b97a7b40cf23b7b45c66bf9a9fc\\r\\n321232eadfd9282c78eb81924ea9e543149f39af07bb70eac66b016ad59a\\r\\n867c7e1e35984b26e12d431e947650aebb3bf3db12e5639bf85fb1191f17\\r\\ncfe4dc364b9e59d026fb892d11bd58f34e44255c09efb7fc939b9a057865\\r\\n6a7bf8bc271457a59d28d7d970a6e376714ba2718571aaa97750a44d5d86\\r\\n4ecb6a079dc5a369cab22d6525009c8a9d758e4270eeb6d4d3dd0f02d68f\\r\\n9b85870fc1798a1376902da1cd991d32d7849896d948182ffb34d08f918e\\r\\n8859ec0af4d4d681cac84a3d440c91b01d56df864e6f2175b32aefee252b\\r\\nb8ace2a0d7c6b4e5adcf3d027a3d7361592baf6c23be9f342533d07b43ae\\r\\neaee2c281a2249b14cbbda87b89f237df0509bae56b40fc1d44b80534fdb\\r\\n1b140d580881cc61f9e84b2332e0cab8698681d5e4fd4f906f413f594c26\\r\\nafe520284dced26f1f0823b11176263a7c5239fe215eba37a99aa14a9f42\\r\\n05af4382838324f844e7b4761db31239017d905a13dd23a04177b4e10322\\r\\nc2cd198c2b3e699983b10e9e48bc4a8cb4efc89ec6444337881690a08154\\r\\n438ddfb7228e35c1c50621b4e898ad08d491afb5bd16225f1889e4642c4a\\r\\nf6af580a5e7f389d99920ec738a31dbb6d50bca2c3a7a9e04bee62cb86fd\\r\\ne3c1f321afc9641e6fced3c5a48bf696ddce7aeca4d45aca5d07859315b9\\r\\nd753d3bb3719e5a47ef1df22a9a7b87642780b52447741d2b9fba610cd52\\r\\n84d7e47fe870c5750cd7f02791e1171f6085e6acbc27d7e1871a4f8dbea6\\r\\n6d7b8243a42880ba2b90dfe865e5f15240a6dd9e8fe221cd0a26f12e2ad4\\r\\n883b965b02ffbb7fd3c15c4fb10b446fe07ddbe021a0e5153134cd2380ed\\r\\n53453cc94a22190e57e8a949c2407e746ade59de429b7a55718db9920c12\\r\\n9d6f69c3f0f85ad428704bdbb579c19a472da39b18c2cb21b588fc480885\\r\\nc6ccaddb7140abc04e95d601669759418387a94b480eb7beca114d9b46c3\\r\\n186f2b835a0fd6b442e960c643a9cb38a9942caae999289e607cb5301c78\\r\\nba6f90d417668ab6595ad53013cd9078c6ee6807adabd3a8b56ed6b001af\\r\\nfaa1e0b53211acc18d64b7f4e5ad70152d09a65844ed45e645439db7cfb0\\r\\nc9546daa320f4b72351083a822dc629a854da98d463184a1d5e2382a20d5\\r\\n5f8712f54f45d83760b63a021448d85a84f5667771ed4a18962d1b427140\\r\\nd13861e2ec6a352074ffbd1ab7e312d803fe9d940a46152cb9b84c63eae4\\r\\neb68006690bad3a509f72489f3d32c5644ae0cf34bb684e133d4dd799d3f\\r\\ncf94164d3ccae084d510fad02257a8d218d070a228a3502d33fd95d1e7d5\\r\\n39e9c76c7f49dbc00d6691f39f4e34498e8e0ae00c3f61acd1d1b9d664ca\\r\\n60d3bd6171c230ea45c1adaa383119b7b4a49dfac09b4184d2110ff28ae7\\r\\na4f0603456325e5f08b21b880ec0c5b4941c803fb7681c36a1163268b7af\\r\\n3641d87711014b7ea7a64a5916f24fad0cbca5ecde314cbd890333b943b6\\r\\n47bd5ce1c7504182f75a7b30cf2f0dc79dd99cbf11bc2f56d2cc1391fcb7\\r\\n8ca601747b54eff3ecf61a2736de05e8b60915182b62cc822f65be009478\\r\\n0ae592003c13fd5328efb1a03bf8c1ead8bbaa404a5400a87ba733c3c096\\r\\ne522bb04bf8e4ee48b86ef09551bccfa4d73f78e14a8d942a33f5ec2da7d\\r\\n9da572235e21c64dba3c33c37c99a5d74db90557411d7d250f5caf575686\\r\\nabd893428bf114bc117fa29dea8602d03c444939ec414d0d10daf9d17604\\r\\n5e144e63d130be238de578565d59a55b5065d71265217603f0af17c9fbaf\\r\\n6f10da58e2176b30086c785eed1bd2681bc58e810dba72c7f2f15ca3386b\\r\\n557e7ea65dd152a7d81edad6babc4f4de5e62194ff0fb5cfff1f1220f655\\r\\n3115a9a4317778189bb038fecafc0e33bd9483db6c04f92aa305b86ed08a\\r\\n0fefb24fb7c79ab8cf4d6c0b85b8055c1322\",\n \"productId\": \"SOVLABS_VRA_MODULES\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/licenses",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"licenses"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate CustomName",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"namingStandard\": {\n\t\t\"id\": 1,\n\t\t\"version\": 0,\n\t\t\"namingSequences\": [\n\t\t  \t{\n\t\t\t  \"format\": \"vra73cls/##/\",\n\t\t\t  \"initialvalue\": \"vra73cls01\",\n\t\t\t  \"reuse\": false,\n\t\t\t  \"name\": \"vraSequence\",\n\t\t\t  \"tenant\": {\n\t\t\t  \t \"id\": 1,\n\t\t\t  \t \"version\": 0,\n\t\t\t  \t \"name\": \"defaultTenant\"\n\t\t\t  },\n\t\t\t  \"version\": 0,\n\t\t\t  \"type\": \"pattern\",\n\t\t\t  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\"\n\t\t\t}\n\t  \t],\n\t  \"name\": \"vraNamingStandard-{{Environment}}\",\n\t  \"template\": \"{{sequence.vraSequence}}\",\n\t  \"tenant\": {\n\t        \"id\": 1,\n\t        \"version\": 0,\n\t        \"name\": \"defaultTenant\"\n\t    }\n\t},\n\t\"dnsSuffix\": \"sovlabs.net\",\n\t\"templateProperties\": {\n\t\t\"ownerName\": \"jsmith@company.com\",\n        \"Environment\": \"dev\",\n        \"OS\": \"Linux\",\n        \"Application\": \"Web Servers\"\n\t},\n\t\"tenant\": {\n\t  \t \"id\": 1,\n\t  \t \"version\": 0,\n\t  \t \"name\": \"defaultTenant\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/customNames?refreshInputs=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"customNames"
+									],
+									"query": [
+										{
+											"key": "refreshInputs",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Naming Sequence",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List CustomNames",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/customNames",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"customNames"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get CustomName",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/customNames/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"customNames",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Naming Sequences",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateNamingSequence",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"format\": \"vra73cls/##/\",\n  \"initialvalue\": \"vra73cls01\",\n  \"reuse\": false,\n  \"name\": \"vraSequence-new-name\",\n  \"tenant\": {\n  \t\t\t\t\"id\":1,\n\t\t\t  \t \"name\": \"tenant1\"\n\t\t\t  },\n  \"type\": \"pattern\",\n  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9890e503-92d5-472e-a9be-7588231ae4fd",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "574652a4-b012-4886-b8c9-16a7c0805b48",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Naming Sequences",
+					"item": [
+						{
+							"name": "Create Naming Sequence #1",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"format\": \"vra73cls/##/\",\n  \"initialvalue\": \"vra73cls01\",\n  \"reuse\": false,\n  \"name\": \"vraSequence\",\n  \"tenant\": {\n\t\t\t  \t \"name\": \"tenant1\"\n\t\t\t  },\n  \"type\": \"pattern\",\n  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Naming Sequence",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateNamingSequence",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"format\": \"vra73cls/##/\",\n  \"initialvalue\": \"vra73cls01\",\n  \"reuse\": false,\n  \"name\": \"vraSequence-new-name\",\n  \"tenant\": {\n  \t\t\t\t\"id\":1,\n\t\t\t  \t \"name\": \"tenant1\"\n\t\t\t  },\n  \"type\": \"pattern\",\n  \"uniquekey\": \"{{ ownerName | split: \\\"@\\\" | first |substring: 0,2 | downcase}}{{ Environment | substring: 0,1| downcase }}{{ OS | substring: 0,1 | downcase }}{{ Application | substring: 0,3 | downcase }}\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Naming Sequences",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "root@defender.local",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Naming Sequence",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/v1/namingSequences/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"v1",
+										"namingSequences",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9890e503-92d5-472e-a9be-7588231ae4fd",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "574652a4-b012-4886-b8c9-16a7c0805b48",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create Tenant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"defaultTenant\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/v1/tenants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Tenant",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"defaultTenant\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/v1/tenants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"v1",
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "root@defender.local",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:7777/perform_login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7777",
+					"path": [
+						"perform_login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Infoblox Get Ref",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "VmwareS0v",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://infoblox803.sovlabs.net/wapi/v2.0/fixedaddress/ZG5zLmZpeGVkX2FkZHJlc3MkMTAuMzAuMzcuNC4wLi4:10.30.37.4/default",
+					"protocol": "https",
+					"host": [
+						"infoblox803",
+						"sovlabs",
+						"net"
+					],
+					"path": [
+						"wapi",
+						"v2.0",
+						"fixedaddress",
+						"ZG5zLmZpeGVkX2FkZHJlc3MkMTAuMzAuMzcuNC4wLi4:10.30.37.4",
+						"default"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "root@defender.local",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "password",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "552eb492-ee99-4252-bc33-59591ee747a7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "d9cc2d84-340c-4316-8d4d-3c22e3c081c1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
