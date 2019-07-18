@@ -1,3 +1,3 @@
-resource "sovlabs_custom_naming" "my-hostname" {
-  address = "1.2.3.4"
+resource "sovlabs_custom_naming" "my-custom-name" {
+  refresh_inputs = false
 }
