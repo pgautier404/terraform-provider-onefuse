@@ -3,3 +3,4 @@ crash.log
 .idea
 *.iml
 .terraform
+terraform-provider-sovlabs
