@@ -28,7 +28,6 @@ func Provider() *schema.Provider {
 			"password": {
 				Type:     schema.TypeString,
 				Required: true,
-				Sensitive: true,
 				DefaultFunc: schema.EnvDefaultFunc("SOVLABS_PASSWORD", nil),
 				Description: "SovLabs REST endpoint password",
 			},
