@@ -6,7 +6,6 @@ import (
 	"testing"
 )
 
-
 func TestHttpReserveCustomName(t *testing.T) {
 	config := GetConfig()
 	cn := httpReserveCustomName(config, "sovlabs.net")
