@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+    "github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/pkg/errors"
 	"io/ioutil"
@@ -40,6 +41,14 @@ func resourceCustomNaming() *schema.Resource {
 
 func resourceCustomNameCreate(d *schema.ResourceData, m interface{}) error {
 	log.Println("calling resourceCustomNameCreate")
+	log.Println("RESOURCE DATA:")
+	log.Println(spew.Sprint(d))
+	log.Print("END RESOURCE DATA")
+
+	log.Println("INTERFACE DATA:")
+	log.Println(spew.Sprint(m))
+	log.Print("END INTERFACE DATA")
+
 	// call service to create/reserve custom name
 	config := m.(Config)
 	dnsSuffix := d.Get("dns_suffix").(string)

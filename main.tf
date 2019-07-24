@@ -70,6 +70,8 @@ resource "vsphere_virtual_machine" "vm" {
   disk {
     label = "disk0"
     size = "${data.vsphere_virtual_machine.template.disks.0.size}"
+    eagerly_scrub    = "${data.vsphere_virtual_machine.template.disks.0.eagerly_scrub}"
+    thin_provisioned = "${data.vsphere_virtual_machine.template.disks.0.thin_provisioned}"
   }
 
   clone {
@@ -82,15 +84,20 @@ resource "vsphere_virtual_machine" "vm" {
       }
 
       network_interface {
+        // windows requires per-network interface DNS settings so these may be ignored by linux
         dns_server_list = [
           "10.30.0.11",
           "10.30.0.12"]
         dns_domain = "bluecat90.${sovlabs_custom_naming.my-custom-name.dns_suffix}"
-        ipv4_address = "10.30.32.13"
+        ipv4_address = "10.30.31.203"
         ipv4_netmask = 24
       }
 
       ipv4_gateway = "10.0.0.1"
+      // linux requires global DNS settings
+      dns_server_list = [
+        "10.30.0.11",
+        "10.30.0.12"]
     }
   }
 
