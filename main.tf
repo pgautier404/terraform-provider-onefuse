@@ -2,7 +2,7 @@ provider "sovlabs" {
 }
 
 resource "sovlabs_custom_naming" "my-custom-name" {
-  dns_suffix = "sovlabs.net"
+  dns_suffix = "bluecat90.sovlabs.net"
   hostname = ""
 }
 
@@ -80,7 +80,7 @@ resource "vsphere_virtual_machine" "vm" {
     customize {
       linux_options {
         host_name = "${sovlabs_custom_naming.my-custom-name.hostname}"
-        domain = "bluecat90.${sovlabs_custom_naming.my-custom-name.dns_suffix}"
+        domain = "${sovlabs_custom_naming.my-custom-name.dns_suffix}"
       }
 
       network_interface {
@@ -88,12 +88,13 @@ resource "vsphere_virtual_machine" "vm" {
         dns_server_list = [
           "10.30.0.11",
           "10.30.0.12"]
-        dns_domain = "bluecat90.${sovlabs_custom_naming.my-custom-name.dns_suffix}"
+        dns_domain = "${sovlabs_custom_naming.my-custom-name.dns_suffix}"
         ipv4_address = "10.30.31.203"
         ipv4_netmask = 24
       }
 
       ipv4_gateway = "10.0.0.1"
+      dns_suffix_list = ["${sovlabs_custom_naming.my-custom-name.dns_suffix}"]
       // linux requires global DNS settings
       dns_server_list = [
         "10.30.0.11",
