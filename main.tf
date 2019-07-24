@@ -93,7 +93,7 @@ resource "vsphere_virtual_machine" "vm" {
         ipv4_netmask = 24
       }
 
-      ipv4_gateway = "10.0.0.1"
+      ipv4_gateway = "10.30.31.1"
       dns_suffix_list = ["${sovlabs_custom_naming.my-custom-name.dns_suffix}"]
       // linux requires global DNS settings
       dns_server_list = [
