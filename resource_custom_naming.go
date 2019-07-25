@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/pkg/errors"
 	"io/ioutil"
@@ -40,11 +41,24 @@ func resourceCustomNaming() *schema.Resource {
 
 func resourceCustomNameCreate(d *schema.ResourceData, m interface{}) error {
 	log.Println("calling resourceCustomNameCreate")
+	log.Println("RESOURCE DATA:")
+	log.Println(spew.Sprint(d))
+	log.Print("END RESOURCE DATA")
+
+	log.Println("INTERFACE DATA:")
+	log.Println(spew.Sprint(m))
+	log.Print("END INTERFACE DATA")
+
 	// call service to create/reserve custom name
 	config := m.(Config)
 	dnsSuffix := d.Get("dns_suffix").(string)
-	cn := httpReserveCustomName(config, dnsSuffix)
-	bindResource(d, cn)
+	cn, err := httpReserveCustomName(config, dnsSuffix)
+	if err != nil {
+		return errors.WithMessage(err, "Failed to reseve custom name")
+	}
+	if err := bindResource(d, cn); err != nil {
+		return errors.WithMessage(err, "cannot bind custom name reservation to resource, perhaps the API has changed?")
+	}
 	return nil
 }
 
@@ -52,12 +66,12 @@ func bindResource(d *schema.ResourceData, cn CustomName) error {
 
 	// setting the ID is REALLY necessary here
 	// we use the FQDN instead of the numeric ID as it is more likely to remain consistent as a composite key in TF
-	d.SetId(cn.Hostname + "." + cn.DnsSuffix)
+	d.SetId(cn.Name + "." + cn.DnsSuffix)
 
 	if err := d.Set("custom_name_id", cn.Id); err != nil {
 		return errors.WithMessage(err, "cannot set custom_name_id")
 	}
-	if err := d.Set("hostname", cn.Hostname); err != nil {
+	if err := d.Set("hostname", cn.Name); err != nil {
 		return errors.WithMessage(err, "cannot set hostname")
 	}
 	if err := d.Set("dns_suffix", cn.DnsSuffix); err != nil {
@@ -69,15 +83,14 @@ func bindResource(d *schema.ResourceData, cn CustomName) error {
 type CustomName struct {
 	Id        int
 	Version   int
-	Hostname  string
+	Name      string
 	DnsSuffix string
 }
 
-func httpReserveCustomName(config Config, dnsSuffix string) CustomName {
-	refreshInputs := false
+func httpReserveCustomName(config Config, dnsSuffix string) (CustomName, error) {
 	address := config.address
 	port := strconv.Itoa(config.port)
-	url := "http://" + address + ":" + port + "/api/v1/customNames?refreshInputs=" + strconv.FormatBool(refreshInputs)
+	url := "http://" + address + ":" + port + "/api/v1/customNames?refreshInputs=" + strconv.FormatBool(false)
 	log.Println("reserving custom name from " + url + "  dnsSuffix=" + dnsSuffix)
 	postBody := "{\n\t\"namingStandard\": \"vraNamingStandard-{{Environment}}\",\n\t\"dnsSuffix\": \"" + dnsSuffix +
 		"\",\n\t\"templateProperties\": {\n\t\t\"ownerName\": \"jsmith@company.com\",\n\t\t\"Environment\": \"dev\",\n\t\t\"OS\": \"Linux\",\n\t\t\"Application\": \"Web Servers\"\n\t},\n\t\"tenant\": \"defaultTenant\"\n}"
@@ -102,13 +115,17 @@ func httpReserveCustomName(config Config, dnsSuffix string) CustomName {
 	log.Println("HTTP POST RESULTS:")
 	log.Println(string(body))
 	var data CustomName
-	json.Unmarshal(body, &data)
-	res.Body.Close()
+	if err := json.Unmarshal(body, &data); err != nil {
+		return data, errors.WithMessage(err, "Failed to unmarshal HTTP POST JSON response")
+	}
+	if err := res.Body.Close(); err != nil {
+		return data, errors.WithMessage(err, "Failed to close HTTP response body stream")
+	}
 	log.Println("custom name reserved: " +
 		"custom_name_id=" + strconv.Itoa(data.Id) +
-		" hostname=" + data.Hostname +
+		" hostname=" + data.Name +
 		" dnsSuffix=" + data.DnsSuffix)
-	return data
+	return data, nil
 }
 
 func setStandardHeaders(req *http.Request) {
@@ -120,7 +137,7 @@ func setStandardHeaders(req *http.Request) {
 	req.Header.Add("cache-control", "no-cache")
 }
 
-func httpGetCustomName(config Config, id int) CustomName {
+func httpGetCustomName(config Config, id int) (CustomName, error) {
 	address := config.address
 	port := strconv.Itoa(config.port)
 	idString := strconv.Itoa(id)
@@ -136,29 +153,38 @@ func httpGetCustomName(config Config, id int) CustomName {
 	log.Println(req)
 	res, _ := http.DefaultClient.Do(req)
 	body, err := ioutil.ReadAll(res.Body)
+	var data CustomName
 	if err != nil {
-		panic(err.Error())
+		return data, errors.WithMessage(err, "Failed to unmarshal response JSON")
 	}
 	log.Println("HTTP GET RESULTS:")
 	log.Println(string(body))
-	var data CustomName
-	json.Unmarshal(body, &data)
-	res.Body.Close()
-	return data
+	if err = json.Unmarshal(body, &data); err != nil {
+		return data, errors.WithMessage(err, "Failed to unmarshal response JSON")
+	}
+	if err := res.Body.Close(); err != nil {
+		return data, errors.WithMessage(err, "Failed to close response body stream")
+	}
+	return data, nil
 }
 
 func resourceCustomNameRead(d *schema.ResourceData, m interface{}) error {
 	config := m.(Config)
 	id := d.Get("custom_name_id").(int)
-	customName := httpGetCustomName(config, id)
-	bindResource(d, customName)
+	customName, err := httpGetCustomName(config, id)
+	if err != nil {
+		return errors.WithMessage(err, "Failed to get custom name from REST API")
+	}
+	if err := bindResource(d, customName); err != nil {
+		return errors.WithMessage(err, "Failed to bind REST API response to terraform resource, perhaps API has changed?")
+	}
 	return nil
 }
 
-func resourceCustomNameUpdate(d *schema.ResourceData, m interface{}) error {
+func resourceCustomNameUpdate(_ *schema.ResourceData, _ interface{}) error {
 	return nil
 }
 
-func resourceCustomNameDelete(d *schema.ResourceData, m interface{}) error {
+func resourceCustomNameDelete(_ *schema.ResourceData, _ interface{}) error {
 	return nil
 }

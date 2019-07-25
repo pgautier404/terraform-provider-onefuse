@@ -1,5 +1,5 @@
-*.tfstate
-crash.log
+*.tfstate*
+*.log
 .idea
 *.iml
 .terraform
