@@ -1,7 +1,21 @@
 provider "sovlabs" {
 }
 
+variable "template_properties_map" {
+  type = "map"
+  default = {
+    // these are dynamic properties,
+    // they can be anything that is defined in the Liquid template
+    ownerName = "jsmith@company.com"
+    environment = "dev"
+    os = "Linux"
+    application = "Web Servers"
+  }
+}
+
 resource "sovlabs_custom_naming" "my-custom-name" {
+  // template_properties = jsonencode(var.template_properties_map)
+  template_properties = file("template_properties.json")
   dns_suffix = "bluecat90.sovlabs.net"
   hostname = ""
 }

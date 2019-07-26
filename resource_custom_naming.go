@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/pkg/errors"
 	"io/ioutil"
@@ -19,6 +18,10 @@ func resourceCustomNaming() *schema.Resource {
 		Update: resourceCustomNameUpdate,
 		Delete: resourceCustomNameDelete,
 		Schema: map[string]*schema.Schema{
+			"template_properties" : {
+				Type: schema.TypeString,
+				Optional: true,
+			},
 			"custom_name_id": {
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -40,19 +43,31 @@ func resourceCustomNaming() *schema.Resource {
 }
 
 func resourceCustomNameCreate(d *schema.ResourceData, m interface{}) error {
-	log.Println("calling resourceCustomNameCreate")
-	log.Println("RESOURCE DATA:")
-	log.Println(spew.Sprint(d))
-	log.Print("END RESOURCE DATA")
 
-	log.Println("INTERFACE DATA:")
-	log.Println(spew.Sprint(m))
-	log.Print("END INTERFACE DATA")
+	// debug the resource(tf state) and interface(config) data
+	// requires 3rd party library "spew": import "github.com/davecgh/go-spew/spew"
+	//log.Println("calling resourceCustomNameCreate")
+	//log.Println("RESOURCE DATA:")
+	//log.Println(spew.Sprint(d))
+	//log.Print("END RESOURCE DATA")
+	//log.Println("INTERFACE DATA:")
+	//log.Println(spew.Sprint(m))
+	//log.Print("END INTERFACE DATA")
 
 	// call service to create/reserve custom name
 	config := m.(Config)
 	dnsSuffix := d.Get("dns_suffix").(string)
-	cn, err := httpReserveCustomName(config, dnsSuffix)
+
+	// if we want to get the properties as a map directly from .tf without json encoding
+	// then we can do this:
+	// templateProperties := d.Get("template_properties").(map[string]interface{})
+	// jsonBytes, err := json.Marshal(templateProperties)
+	// jsonString := string(jsonBytes)
+
+	// get template_properties as string
+	jsonString := d.Get("template_properties").(string)
+
+	cn, err := httpReserveCustomName(config, jsonString, dnsSuffix)
 	if err != nil {
 		return errors.WithMessage(err, "Failed to reseve custom name")
 	}
@@ -65,7 +80,7 @@ func resourceCustomNameCreate(d *schema.ResourceData, m interface{}) error {
 func bindResource(d *schema.ResourceData, cn CustomName) error {
 
 	// setting the ID is REALLY necessary here
-	// we use the FQDN instead of the numeric ID as it is more likely to remain consistent as a composite key in TF
+	// we use the full host.domain instead of a numeric ID as it will remain a consistent composite key
 	d.SetId(cn.Name + "." + cn.DnsSuffix)
 
 	if err := d.Set("custom_name_id", cn.Id); err != nil {
@@ -87,13 +102,15 @@ type CustomName struct {
 	DnsSuffix string
 }
 
-func httpReserveCustomName(config Config, dnsSuffix string) (CustomName, error) {
+func httpReserveCustomName(config Config, templateProperties string, dnsSuffix string) (CustomName, error) {
 	address := config.address
 	port := strconv.Itoa(config.port)
 	url := "http://" + address + ":" + port + "/api/v1/customNames?refreshInputs=" + strconv.FormatBool(false)
 	log.Println("reserving custom name from " + url + "  dnsSuffix=" + dnsSuffix)
 	postBody := "{\n\t\"namingStandard\": \"vraNamingStandard-{{Environment}}\",\n\t\"dnsSuffix\": \"" + dnsSuffix +
-		"\",\n\t\"templateProperties\": {\n\t\t\"ownerName\": \"jsmith@company.com\",\n\t\t\"Environment\": \"dev\",\n\t\t\"OS\": \"Linux\",\n\t\t\"Application\": \"Web Servers\"\n\t},\n\t\"tenant\": \"defaultTenant\"\n}"
+		"\",\n\t\"templateProperties\": " + templateProperties +
+		//"{\n\t\t\"ownerName\": \"jsmith@company.com\",\n\t\t\"Environment\": \"dev\",\n\t\t\"OS\": \"Linux\",\n\t\t\"Application\": \"Web Servers\"\n\t}" +
+		",\n\t\"tenant\": \"defaultTenant\"\n}"
 	payload := strings.NewReader(postBody)
 	log.Println("CONFIG:")
 	log.Println(config)
