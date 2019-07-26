@@ -1,7 +1,44 @@
+
+variable "sovlabs_address" {
+  type = string
+}
+
+variable "sovlabs_port" {
+  type = string
+}
+
+variable "sovlabs_user" {
+  type = string
+}
+
+variable "sovlabs_password" {
+  type = string
+}
+
 provider "sovlabs" {
+  address = var.sovlabs_address
+  port = var.sovlabs_port
+  user = var.sovlabs_user
+  password = var.sovlabs_password
+}
+
+// this example uses a map in the .tf file
+// to configure dynamic template properties
+variable "template_properties_map" {
+  type = "map"
+  default = {
+    // these are dynamic properties,
+    // they can be anything that is defined in the Liquid template
+    ownerName = "jsmith@company.com"
+    environment = "dev"
+    os = "Linux"
+    application = "Web Servers"
+  }
 }
 
 resource "sovlabs_custom_naming" "my-custom-name" {
+  // template_properties = jsonencode(var.template_properties_map)
+  template_properties = file("template_properties.json")
   dns_suffix = "bluecat90.sovlabs.net"
   hostname = ""
 }
