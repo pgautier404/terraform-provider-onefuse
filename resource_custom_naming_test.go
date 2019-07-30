@@ -9,7 +9,7 @@ import (
 func TestHttpReserveCustomName(t *testing.T) {
 	config := GetConfig()
 	templateProperties := "{\n\t\t\"ownerName\": \"jsmith@company.com\",\n\t\t\"Environment\": \"dev\",\n\t\t\"OS\": \"Linux\",\n\t\t\"Application\": \"Web Servers\"\n\t}"
-	cn, err := httpReserveCustomName(config, templateProperties,"sovlabs.net")
+	cn, err := httpReserveCustomName(config, templateProperties, "sovlabs.net")
 	if err != nil {
 		t.Error(err)
 	}

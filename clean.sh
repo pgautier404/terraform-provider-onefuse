@@ -4,4 +4,3 @@
 rm -f terraform.tfstate*
 rm -rf /tmp/tf-state*
 rm -f terraform.log
-

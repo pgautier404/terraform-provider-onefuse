@@ -1,4 +1,3 @@
-
 variable "sovlabs_address" {
   type = string
 }
@@ -37,8 +36,13 @@ variable "template_properties_map" {
 }
 
 resource "sovlabs_custom_naming" "my-custom-name" {
-  // template_properties = jsonencode(var.template_properties_map)
-  template_properties = file("template_properties.json")
+
+  // option 1: dynamic properties in the .tf file (above variable "template_properties_map")
+  template_properties = jsonencode(var.template_properties_map)
+
+  // option 2: load a separate dynamic template properties file
+  // template_properties = file("template_properties.json")
+
   dns_suffix = "bluecat90.sovlabs.net"
   hostname = ""
 }
@@ -107,7 +111,7 @@ resource "vsphere_virtual_machine" "vm" {
   disk {
     label = "disk0"
     size = "${data.vsphere_virtual_machine.template.disks.0.size}"
-    eagerly_scrub    = "${data.vsphere_virtual_machine.template.disks.0.eagerly_scrub}"
+    eagerly_scrub = "${data.vsphere_virtual_machine.template.disks.0.eagerly_scrub}"
     thin_provisioned = "${data.vsphere_virtual_machine.template.disks.0.thin_provisioned}"
   }
 
@@ -131,7 +135,8 @@ resource "vsphere_virtual_machine" "vm" {
       }
 
       ipv4_gateway = "10.30.31.1"
-      dns_suffix_list = ["${sovlabs_custom_naming.my-custom-name.dns_suffix}"]
+      dns_suffix_list = [
+        "${sovlabs_custom_naming.my-custom-name.dns_suffix}"]
       // linux requires global DNS settings
       dns_server_list = [
         "10.30.0.11",
