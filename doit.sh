@@ -14,4 +14,3 @@ echo 'running terraform init/plan/apply...'
 terraform init
 terraform plan
 terraform apply
-

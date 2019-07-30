@@ -9,4 +9,3 @@ export TF_VAR_sovlabs_user="root@sovlabs.local"
 export TF_VAR_sovlabs_password="password"
 
 export TF_VAR_vsphere_server=vcenter01.sovlabs.net
-

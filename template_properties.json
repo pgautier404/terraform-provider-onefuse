@@ -1,6 +1,6 @@
 {
-    "ownerName": "jsmith@company.com",
-    "environment": "dev",
-    "os": "Linux",
-    "application": "Web Servers"
+  "ownerName": "jsmith@company.com",
+  "environment": "dev",
+  "os": "Linux",
+  "application": "Web Servers"
 }
