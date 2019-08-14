@@ -1,3 +1,5 @@
+// Example Terraform to get Custom Name and provision VM using VSphere provider
+
 variable "sovlabs_address" {
   type = string
 }
@@ -28,10 +30,10 @@ variable "template_properties_map" {
   default = {
     // these are dynamic properties,
     // they can be anything that is defined in the Liquid template
-    ownerName = "jsmith@company.com"
-    environment = "dev"
-    os = "Linux"
-    application = "Web Servers"
+    environment = "prod"
+    ostype = "linux"
+    application = "web"
+    SVL_DPS_Loc = "Location"
   }
 }
 
@@ -44,6 +46,8 @@ resource "sovlabs_custom_naming" "my-custom-name" {
   // template_properties = file("template_properties.json")
 
   dns_suffix = "bluecat90.sovlabs.net"
+  tenant_name = "c18db6e1-32a6-4c07-a38b-958b1e6364d3"
+  naming_standard = "global"
   hostname = ""
 }
 

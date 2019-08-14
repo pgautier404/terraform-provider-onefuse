@@ -3,6 +3,8 @@
 # destroy vm from previous run
 echo 'setting environment...'
 source ./setenv.sh
+
+# destroys the prior vm and DELETE's the custom name 
 echo 'running terraform destroy (for prior vm)'
 terraform destroy
 
