@@ -18,6 +18,14 @@ func resourceCustomNaming() *schema.Resource {
 		Update: resourceCustomNameUpdate,
 		Delete: resourceCustomNameDelete,
 		Schema: map[string]*schema.Schema{
+			"tenant_name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"naming_standard": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"template_properties": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -56,7 +64,6 @@ func resourceCustomNameCreate(d *schema.ResourceData, m interface{}) error {
 
 	// call service to create/reserve custom name
 	config := m.(Config)
-	dnsSuffix := d.Get("dns_suffix").(string)
 
 	// if we want to get the properties as a map directly from .tf without json encoding
 	// then we can do this:
@@ -65,11 +72,14 @@ func resourceCustomNameCreate(d *schema.ResourceData, m interface{}) error {
 	// jsonString := string(jsonBytes)
 
 	// get template_properties as string
-	jsonString := d.Get("template_properties").(string)
+	templatePropertiesJson := d.Get("template_properties").(string)
+	tenant := d.Get("tenant_name").(string)
+	namingStandard := d.Get("naming_standard").(string)
+	dnsSuffix := d.Get("dns_suffix").(string)
 
-	cn, err := httpReserveCustomName(config, jsonString, dnsSuffix)
+	cn, err := httpReserveCustomName(config, tenant, namingStandard, dnsSuffix, templatePropertiesJson)
 	if err != nil {
-		return errors.WithMessage(err, "Failed to reseve custom name")
+		return errors.WithMessage(err, "Failed to reserve custom name")
 	}
 	if err := bindResource(d, cn); err != nil {
 		return errors.WithMessage(err, "cannot bind custom name reservation to resource, perhaps the API has changed?")
@@ -102,13 +112,13 @@ type CustomName struct {
 	DnsSuffix string
 }
 
-func httpReserveCustomName(config Config, templateProperties string, dnsSuffix string) (CustomName, error) {
+func httpReserveCustomName(config Config, tenant string, namingStandard string, dnsSuffix string, templatePropertiesJson string) (CustomName, error) {
 	address := config.address
 	port := strconv.Itoa(config.port)
 	url := "http://" + address + ":" + port + "/api/v1/customNames?refreshInputs=" + strconv.FormatBool(false)
 	log.Println("reserving custom name from " + url + "  dnsSuffix=" + dnsSuffix)
-	postBody := "{\n\t\"namingStandard\": \"vraNamingStandard-{{Environment}}\",\n\t\"dnsSuffix\": \"" + dnsSuffix +
-		"\",\n\t\"templateProperties\": " + templateProperties + ",\n\t\"tenant\": \"defaultTenant\"\n}"
+	postBody := "{\n\t\"namingStandard\": \"" + namingStandard + "\",\n\t\"dnsSuffix\": \"" + dnsSuffix +
+		"\",\n\t\"templateProperties\": " + templatePropertiesJson + ",\n\t\"tenant\": \"" + tenant + "\"\n}"
 	payload := strings.NewReader(postBody)
 	log.Println("CONFIG:")
 	log.Println(config)

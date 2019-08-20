@@ -1,6 +1,7 @@
 {
-  "ownerName": "jsmith@company.com",
-  "environment": "dev",
-  "os": "Linux",
-  "application": "Web Servers"
+  "location": "east",
+  "environment": "prod",
+  "ostype": "linux",
+  "application": "web",
+  "SVL_DPS_Loc": "Location"
 }
