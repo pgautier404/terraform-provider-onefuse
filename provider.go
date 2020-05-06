@@ -7,50 +7,67 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
+			"scheme": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("FUSE_SCHEME", "http"),
+				Description: "Fuse REST endpoint scheme (http or https)",
+			},
 			"address": {
 				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("SOVLABS_ADDRESS", nil),
-				Description: "SovLabs REST endpoint service host address",
+				DefaultFunc: schema.EnvDefaultFunc("FUSE_ADDRESS", nil),
+				Description: "Fuse REST endpoint service host address",
 			},
 			"port": {
-				Type:        schema.TypeInt,
+				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("SOVLABS_PORT", nil),
-				Description: "SovLabs REST endpoint service port number/integer",
+				DefaultFunc: schema.EnvDefaultFunc("FUSE_PORT", nil),
+				Description: "Fuse REST endpoint service port number",
 			},
 			"user": {
 				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("SOVLABS_USER", nil),
-				Description: "SovLabs REST endpoint user name",
+				DefaultFunc: schema.EnvDefaultFunc("FUSE_USER", nil),
+				Description: "Fuse REST endpoint user name",
 			},
 			"password": {
 				Type:        schema.TypeString,
 				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("SOVLABS_PASSWORD", nil),
-				Description: "SovLabs REST endpoint password",
+				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("FUSE_PASSWORD", nil),
+				Description: "Fuse REST endpoint password",
+			},
+			"verify_ssl": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("FUSE_VERIFY_SSL", true),
+				Description: "Verify SSL certificates for Fuse endpoints",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"sovlabs_custom_naming": resourceCustomNaming(),
+			"fuse_naming": resourceCustomNaming(),
 		},
 		ConfigureFunc: configureProvider,
 	}
 }
 
 type Config struct {
-	address  string
-	port     int
-	user     string
-	password string
+	scheme    string
+	address   string
+	port      string
+	user      string
+	password  string
+	verifySSL bool
 }
 
 func configureProvider(d *schema.ResourceData) (interface{}, error) {
 	return Config{
-		address:  d.Get("address").(string),
-		port:     d.Get("port").(int),
-		user:     d.Get("user").(string),
-		password: d.Get("password").(string),
+		scheme:    d.Get("scheme").(string),
+		address:   d.Get("address").(string),
+		port:      d.Get("port").(string),
+		user:      d.Get("user").(string),
+		password:  d.Get("password").(string),
+		verifySSL: d.Get("verify_ssl").(bool),
 	}, nil
 }

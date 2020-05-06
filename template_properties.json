@@ -1,7 +1,0 @@
-{
-  "location": "east",
-  "environment": "prod",
-  "ostype": "linux",
-  "application": "web",
-  "SVL_DPS_Loc": "Location"
-}

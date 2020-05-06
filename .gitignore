@@ -1,6 +1,7 @@
-*.tfstate*
-*.log
+*.tfstate
+crash.log
 .idea
 *.iml
 .terraform
-terraform-provider-sovlabs
+terraform-provider-*
+terraform.tfstate.backup
