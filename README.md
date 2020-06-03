@@ -1,13 +1,13 @@
-# terraform-provider-fuse
-Terraform Provider for integrating with SovLabs Fuse.
+# terraform-provider-onefuse
+Terraform Provider for integrating with SovLabs OneFuse.
 
 ## Sample Terraform Configuration
-To get started with the Terraform Provider for SovLabs Fuse, put the following into a file called `main.tf`.
+To get started with the Terraform Provider for SovLabs OneFuse, put the following into a file called `main.tf`.
 
-Fill in the `provider "fuse"` section with details about your SovLabs Fuse instance.
+Fill in the `provider "onefuse"` section with details about your SovLabs OneFuse instance.
 
 ```hcl
-provider "fuse" {
+provider "onefuse" {
   address     = "localhost"
   port        = "8000"
   user        = "admin"
@@ -16,7 +16,7 @@ provider "fuse" {
   verify_ssl  = false
 }
 
-resource "fuse_naming" "my-fuse-name" {
+resource "onefuse_naming" "my-onefuse-name" {
   naming_policy_id        = "2"
   dns_suffix              = "sovlabs.net"
   workspace_id            = "6"

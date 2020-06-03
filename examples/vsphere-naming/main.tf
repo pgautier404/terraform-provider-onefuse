@@ -1,38 +1,38 @@
 
-variable "fuse_user" {
+variable "onefuse_user" {
   type = string
 }
 
-variable "fuse_password" {
+variable "onefuse_password" {
   type = string
 }
 
-variable "fuse_address" {
+variable "onefuse_address" {
   type = string
 }
 
-variable "fuse_port" {
+variable "onefuse_port" {
   type = string
 }
 
-provider "fuse" {
-  address     = var.fuse_address
-  port        = var.fuse_port
-  user        = var.fuse_user
-  password    = var.fuse_password
+provider "onefuse" {
+  address     = var.onefuse_address
+  port        = var.onefuse_port
+  user        = var.onefuse_user
+  password    = var.onefuse_password
 }
 
-variable "fuse_naming_policy_id" {
+variable "onefuse_naming_policy_id" {
   type = string
 }
 
-variable "fuse_dns_suffix" {
+variable "onefuse_dns_suffix" {
   type = string
 }
 
-resource "fuse_naming" "my-fuse-name" {
-  naming_policy_id        = var.fuse_naming_policy_id
-  dns_suffix              = var.fuse_dns_suffix
+resource "onefuse_naming" "my-onefuse-name" {
+  naming_policy_id        = var.onefuse_naming_policy_id
+  dns_suffix              = var.onefuse_dns_suffix
   template_properties     = {
       "ownerName"               = "jsmith@company.com"
       "Environment"             = "dev"
@@ -89,7 +89,7 @@ data "vsphere_virtual_machine" "template" {
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  name = fuse_naming.my-fuse-name.name
+  name = onefuse_naming.my-onefuse-name.name
   resource_pool_id = data.vsphere_resource_pool.pool.id
   datastore_id = data.vsphere_datastore.datastore.id
 
@@ -116,8 +116,8 @@ resource "vsphere_virtual_machine" "vm" {
 
     customize {
       linux_options {
-        host_name = fuse_naming.my-fuse-name.name
-        domain = fuse_naming.my-fuse-name.dns_suffix
+        host_name = onefuse_naming.my-onefuse-name.name
+        domain = onefuse_naming.my-onefuse-name.dns_suffix
       }
 
       network_interface {
@@ -125,14 +125,14 @@ resource "vsphere_virtual_machine" "vm" {
         dns_server_list = [
           "10.30.0.11",
           "10.30.0.12"]
-        dns_domain = fuse_naming.my-fuse-name.dns_suffix
+        dns_domain = onefuse_naming.my-onefuse-name.dns_suffix
         ipv4_address = "10.30.31.203"
         ipv4_netmask = 24
       }
 
       ipv4_gateway = "10.30.31.1"
       dns_suffix_list = [
-        fuse_naming.my-fuse-name.dns_suffix]
+        onefuse_naming.my-onefuse-name.dns_suffix]
       // linux requires global DNS settings
       dns_server_list = [
         "10.30.0.11",

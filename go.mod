@@ -1,4 +1,4 @@
-module github.com/cloudboltsoftware/terraform-provider-fuse
+module github.com/cloudboltsoftware/terraform-provider-onefuse
 
 go 1.13
 

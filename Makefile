@@ -1,4 +1,4 @@
-PLUGIN_EXECUTABLE=terraform-provider-fuse
+PLUGIN_EXECUTABLE=terraform-provider-onefuse
 TF_PLUGINS_DIR=$(HOME)/.terraform.d/plugins/
 
 .PHONY : install

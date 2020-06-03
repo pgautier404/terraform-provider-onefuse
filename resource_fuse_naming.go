@@ -55,7 +55,7 @@ func resourceCustomNameCreate(d *schema.ResourceData, m interface{}) error {
 	namingPolicyID := d.Get("naming_policy_id").(string)
 	workspaceID := d.Get("workspace_id").(string)
 	templateProperties := d.Get("template_properties").(map[string]interface{})
-	cn, err := config.NewFuseApiClient().GenerateCustomName(dnsSuffix, namingPolicyID, workspaceID, templateProperties)
+	cn, err := config.NewOneFuseApiClient().GenerateCustomName(dnsSuffix, namingPolicyID, workspaceID, templateProperties)
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,7 @@ func bindResource(d *schema.ResourceData, cn CustomName) error {
 func resourceCustomNameRead(d *schema.ResourceData, m interface{}) error {
 	config := m.(Config)
 	id := d.Get("custom_name_id").(int)
-	customName, err := config.NewFuseApiClient().GetCustomName(id)
+	customName, err := config.NewOneFuseApiClient().GetCustomName(id)
 	bindResource(d, customName)
 	return err
 }
@@ -96,6 +96,6 @@ func resourceCustomNameUpdate(d *schema.ResourceData, m interface{}) error {
 func resourceCustomNameDelete(d *schema.ResourceData, m interface{}) error {
 	config := m.(Config)
 	id := d.Get("custom_name_id").(int)
-	config.NewFuseApiClient().DeleteCustomName(id)
+	config.NewOneFuseApiClient().DeleteCustomName(id)
 	return nil
 }

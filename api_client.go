@@ -15,7 +15,7 @@ import (
 const NamingResourceType = "customNames"
 const WorkspaceResourceType = "workspaces"
 
-type FuseAPIClient struct {
+type OneFuseAPIClient struct {
 	config *Config
 }
 
@@ -35,13 +35,13 @@ type WorkspacesListResponse struct {
 	} `json:"_embedded"`
 }
 
-func (c *Config) NewFuseApiClient() *FuseAPIClient {
-	return &FuseAPIClient{
+func (c *Config) NewOneFuseApiClient() *OneFuseAPIClient {
+	return &OneFuseAPIClient{
 		config: c,
 	}
 }
 
-func (apiClient *FuseAPIClient) GenerateCustomName(dnsSuffix string, namingPolicyID string, workspaceID string,
+func (apiClient *OneFuseAPIClient) GenerateCustomName(dnsSuffix string, namingPolicyID string, workspaceID string,
 	templateProperties map[string]interface{}) (result *CustomName, err error) {
 
 	config := apiClient.config
@@ -113,7 +113,7 @@ func (apiClient *FuseAPIClient) GenerateCustomName(dnsSuffix string, namingPolic
 	return
 }
 
-func (apiClient *FuseAPIClient) GetCustomName(id int) (result CustomName, err error) {
+func (apiClient *OneFuseAPIClient) GetCustomName(id int) (result CustomName, err error) {
 	config := apiClient.config
 	url := itemURL(config, NamingResourceType, id)
 	req, err := http.NewRequest("GET", url, nil)
@@ -139,7 +139,7 @@ func (apiClient *FuseAPIClient) GetCustomName(id int) (result CustomName, err er
 	return
 }
 
-func (apiClient *FuseAPIClient) DeleteCustomName(id int) error {
+func (apiClient *OneFuseAPIClient) DeleteCustomName(id int) error {
 	config := apiClient.config
 	url := itemURL(config, NamingResourceType, id)
 	req, _ := http.NewRequest("DELETE", url, nil)
