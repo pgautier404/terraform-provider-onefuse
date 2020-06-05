@@ -15,16 +15,11 @@ variable "onefuse_port" {
   type = string
 }
 
-variable "onefuse_scheme" {
-  type = string
-}
-
 provider "onefuse" {
   address     = var.onefuse_address
   port        = var.onefuse_port
   user        = var.onefuse_user
   password    = var.onefuse_password
-  scheme      = var.onefuse_scheme
   verify_ssl  = false
 }
 
